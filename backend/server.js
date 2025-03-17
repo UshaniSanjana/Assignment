@@ -5,6 +5,7 @@ import router from "./routes/routes.js";
 import "./controller/passport.controller.js";
 import passport from "passport";
 import session from "express-session";
+import cors from "cors";
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
@@ -12,6 +13,13 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(express.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+  })
+);
 
 app.use(
   session({

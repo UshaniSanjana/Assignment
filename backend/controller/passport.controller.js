@@ -8,7 +8,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:5000/auth/google/callback",
+      callbackURL: "http://localhost:5000/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
@@ -19,7 +19,6 @@ passport.use(
         let admin = await Admin.findOne({ email });
 
         if (admin) {
-          // If the email exists but googleId is missing, update it
           if (!admin.googleId) {
             admin.googleId = googleId;
             await admin.save();
@@ -27,19 +26,16 @@ passport.use(
           return done(null, admin);
         }
 
-        // Generate a unique username from email
         const username = email ? email.split("@")[0] : `user_${googleId}`;
 
-        // Generate a default password (hashed from Google ID)
         const password = await bcrypt.hash(googleId, 10);
 
-        // Create a new Admin user
         admin = new Admin({
           googleId,
           name,
           username,
           email,
-          password, // Store hashed password
+          password,
         });
 
         await admin.save();
