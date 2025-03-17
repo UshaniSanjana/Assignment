@@ -36,7 +36,7 @@ const StudentForm = ({ currenStudentId, onSubmit }) => {
   const handleChange = (e) => {
     const { name, value, type, files } = e.target;
     if (type === "file") {
-      setStudent({ ...student, image: files[0] }); // Set new image file
+      setStudent({ ...student, image: files[0] }); 
     } else {
       setStudent({ ...student, [name]: value });
     }
